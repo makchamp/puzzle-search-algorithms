@@ -1,18 +1,25 @@
 class Puzzle:
 
-    def __init__(self, rows, setup):
+    def __init__(self, rows, setup, goal_setups=None):
+
         self.search_path = []
         self.solution_path = []
         self.current_setup = setup
+
         if rows < 2:
             raise Exception('there has to be at least two rows')
         self.rows: int = rows
+
         self.columns: int = int(len(self.current_setup) / self.rows)
         if self.columns < 2:
             raise Exception('there has to be at least two columns')
 
         self.total_cost = 0
-        self.goal_setups = [[1, 2, 3, 4, 5, 6, 7, 0], [1, 3, 5, 7, 2, 4, 6, 0]]
+
+        # add support for dynamic goal states
+        if goal_setups is None:
+            goal_setups = [[1, 2, 3, 4, 5, 6, 7, 0], [1, 3, 5, 7, 2, 4, 6, 0]]
+        self.goal_setups = goal_setups
 
     def __str__(self):
 
