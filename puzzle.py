@@ -1,10 +1,19 @@
 class Puzzle:
 
+    # the cost of each move
+    move_cost = {
+        'move_wrapping': 2,
+        'move_diagonal_short': 3,
+        'move_diagonal_long': 3,
+        'move_right': 1,
+        'move_left': 1,
+        'move_down': 1,
+        'move_up': 1
+    }
+
     def __init__(self, rows, setup, goal_setups=None):
 
-        self.search_path = []
-        self.solution_path = []
-        self.current_setup = setup
+        self.current_setup: [] = setup
 
         if rows < 2:
             raise Exception('there has to be at least two rows')
@@ -122,12 +131,16 @@ class Puzzle:
         replacement_tile_position = empty_tile_location - self.columns
 
         # create a new setup and replace the empty tile with the tile above
-        new_setup = self.current_setup
+        new_setup = self.current_setup.copy()
         new_setup[empty_tile_location] = new_setup[replacement_tile_position]
         new_setup[replacement_tile_position] = 0
 
-        print("move_up applied")
-        return new_setup
+        # print("move_up applied")
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        move_name = "move_up"
+        move_cost = self.move_cost[move_name]
+
+        return (new_puzzle, move_name, move_cost)
 
     def move_down(self):
         # this method will create a new state when the empty tile is moved down
@@ -139,12 +152,15 @@ class Puzzle:
         replacement_tile_position = empty_tile_location + self.columns
 
         # create a new setup and replace the empty tile with the tile above
-        new_setup = self.current_setup
+        new_setup = self.current_setup.copy()
         new_setup[empty_tile_location] = new_setup[replacement_tile_position]
         new_setup[replacement_tile_position] = 0
 
-        print("move_down applied")
-        return new_setup
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        move_name = "move_down"
+        move_cost = self.move_cost[move_name]
+
+        return (new_puzzle, move_name, move_cost)
 
     def move_right(self):
         # this method will create a new state when the empty tile is moved right
@@ -156,12 +172,17 @@ class Puzzle:
         replacement_tile_position = empty_tile_location + 1
 
         # create a new setup and replace the empty tile with the tile above
-        new_setup = self.current_setup
+        new_setup = self.current_setup.copy()
         new_setup[empty_tile_location] = new_setup[replacement_tile_position]
         new_setup[replacement_tile_position] = 0
 
         print("move_right applied")
-        return new_setup
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        move_name = "move_right"
+        move_cost = self.move_cost[move_name]
+
+        return (new_puzzle, move_name, move_cost)
+
 
     def move_left(self):
         # this method will create a new state when the empty tile is moved left
@@ -173,12 +194,15 @@ class Puzzle:
         replacement_tile_position = empty_tile_location - 1
 
         # create a new setup and replace the empty tile with the tile above
-        new_setup = self.current_setup
+        new_setup = self.current_setup.copy()
         new_setup[empty_tile_location] = new_setup[replacement_tile_position]
         new_setup[replacement_tile_position] = 0
 
-        print("move_left applied")
-        return new_setup
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        move_name = "move_left"
+        move_cost = self.move_cost[move_name]
+
+        return (new_puzzle, move_name, move_cost)
 
     def move_wrapping(self):
         # this method will create a new state when the empty tile is moved to the other corner in the row
@@ -199,12 +223,15 @@ class Puzzle:
             replacement_tile_position = len(self.current_setup) - self.columns
 
         # create a new setup and replace the empty tile with the replacement tile
-        new_setup = self.current_setup
+        new_setup = self.current_setup.copy()
         new_setup[empty_tile_location] = new_setup[replacement_tile_position]
         new_setup[replacement_tile_position] = 0
 
-        print("move_wrapping applied")
-        return new_setup
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        move_name = "move_wrapping"
+        move_cost = self.move_cost[move_name]
+
+        return (new_puzzle, move_name, move_cost)
 
     def move_diagonal_short(self):
         # this method will create a new state when the empty tile is moved diagonally
@@ -225,12 +252,16 @@ class Puzzle:
             replacement_tile_position = len(self.current_setup) - self.columns - 2
 
         # create a new setup and replace the empty tile with the replacement tile
-        new_setup = self.current_setup
+        new_setup = self.current_setup.copy()
         new_setup[empty_tile_location] = new_setup[replacement_tile_position]
         new_setup[replacement_tile_position] = 0
 
         print("move_diagonal_short applied")
-        return new_setup
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        move_name = "move_diagonal_short"
+        move_cost = self.move_cost[move_name]
+
+        return (new_puzzle, move_name, move_cost)
 
     def move_diagonal_long(self):
         # this method will create a new state when the empty tile is moved to the oppisite corner
@@ -251,9 +282,59 @@ class Puzzle:
             replacement_tile_position = 0
 
         # create a new setup and replace the empty tile with the replacement tile
-        new_setup = self.current_setup
+        new_setup = self.current_setup.copy()
         new_setup[empty_tile_location] = new_setup[replacement_tile_position]
         new_setup[replacement_tile_position] = 0
 
         print("move_diagonal_long applied")
-        return new_setup
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        move_name = "move_diagonal_long"
+        move_cost = self.move_cost[move_name]
+
+        return (new_puzzle, move_name, move_cost)
+
+    def get_heuristic(self):
+        # this method will return the value of the heuristic
+
+        # this is the naive heuristic, h0 that will be used for the demo
+        if self.current_setup.index(0) == len(self.current_setup) - 1:
+            return 0
+
+        return 1
+
+    def get_successors(self):
+        # this method will return all the successors of the current setup by applying all the possible actions
+
+        successor_puzzles = []
+
+        for action in self.possible_moves():
+            if action == 'move_wrapping':
+                successor_puzzles.append(self.move_wrapping())
+                continue
+
+            if action == 'move_diagonal_short':
+                successor_puzzles.append(self.move_diagonal_short())
+                continue
+
+            if action == 'move_diagonal_long':
+                successor_puzzles.append(self.move_diagonal_long())
+                continue
+
+            if action == 'move_right':
+                successor_puzzles.append(self.move_right())
+                continue
+
+            if action == 'move_left':
+                successor_puzzles.append(self.move_left())
+                continue
+
+            if action == 'move_down':
+                successor_puzzles.append(self.move_down())
+                continue
+
+            if action == 'move_up':
+                successor_puzzles.append(self.move_up())
+                continue
+
+        return successor_puzzles
+
