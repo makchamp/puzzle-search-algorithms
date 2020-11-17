@@ -32,14 +32,15 @@ class Puzzle:
 
     def __str__(self):
 
-        # divide the long list into rows and columns depending on the puzzle size
-        sublists = []
-        for row in range(0, len(self.current_setup), self.columns):
-            sublists.append(self.current_setup[row:row + self.columns])
+        # # divide the long list into rows and columns depending on the puzzle size
+        # sublists = []
+        # for row in range(0, len(self.current_setup), self.columns):
+        #     sublists.append(self.current_setup[row:row + self.columns])
+        #
+        # tiles = '\n'.join(' '.join(map(str, row)) for row in sublists)
+        string_representaion = ' '.join(str(tile) for tile in self.current_setup)
 
-        tiles = '\n'.join(' '.join(map(str, row)) for row in sublists)
-
-        return tiles
+        return string_representaion
 
     def possible_moves(self):
         possible_moves = []
@@ -140,7 +141,9 @@ class Puzzle:
         move_name = "move_up"
         move_cost = self.move_cost[move_name]
 
-        return (new_puzzle, move_name, move_cost)
+        replacement_tile = self.current_setup[replacement_tile_position]
+
+        return (new_puzzle, move_name, move_cost, replacement_tile)
 
     def move_down(self):
         # this method will create a new state when the empty tile is moved down
@@ -160,7 +163,9 @@ class Puzzle:
         move_name = "move_down"
         move_cost = self.move_cost[move_name]
 
-        return (new_puzzle, move_name, move_cost)
+        replacement_tile = self.current_setup[replacement_tile_position]
+
+        return (new_puzzle, move_name, move_cost, replacement_tile)
 
     def move_right(self):
         # this method will create a new state when the empty tile is moved right
@@ -181,8 +186,9 @@ class Puzzle:
         move_name = "move_right"
         move_cost = self.move_cost[move_name]
 
-        return (new_puzzle, move_name, move_cost)
+        replacement_tile = self.current_setup[replacement_tile_position]
 
+        return (new_puzzle, move_name, move_cost, replacement_tile)
 
     def move_left(self):
         # this method will create a new state when the empty tile is moved left
@@ -202,7 +208,9 @@ class Puzzle:
         move_name = "move_left"
         move_cost = self.move_cost[move_name]
 
-        return (new_puzzle, move_name, move_cost)
+        replacement_tile = self.current_setup[replacement_tile_position]
+
+        return (new_puzzle, move_name, move_cost, replacement_tile)
 
     def move_wrapping(self):
         # this method will create a new state when the empty tile is moved to the other corner in the row
@@ -230,8 +238,9 @@ class Puzzle:
         new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
         move_name = "move_wrapping"
         move_cost = self.move_cost[move_name]
+        replacement_tile = self.current_setup[replacement_tile_position]
 
-        return (new_puzzle, move_name, move_cost)
+        return (new_puzzle, move_name, move_cost, replacement_tile)
 
     def move_diagonal_short(self):
         # this method will create a new state when the empty tile is moved diagonally
@@ -261,7 +270,9 @@ class Puzzle:
         move_name = "move_diagonal_short"
         move_cost = self.move_cost[move_name]
 
-        return (new_puzzle, move_name, move_cost)
+        replacement_tile = self.current_setup[replacement_tile_position]
+
+        return (new_puzzle, move_name, move_cost, replacement_tile)
 
     def move_diagonal_long(self):
         # this method will create a new state when the empty tile is moved to the oppisite corner
@@ -291,16 +302,10 @@ class Puzzle:
         move_name = "move_diagonal_long"
         move_cost = self.move_cost[move_name]
 
-        return (new_puzzle, move_name, move_cost)
+        replacement_tile = self.current_setup[replacement_tile_position]
 
-    def get_heuristic(self):
-        # this method will return the value of the heuristic
+        return (new_puzzle, move_name, move_cost, replacement_tile)
 
-        # this is the naive heuristic, h0 that will be used for the demo
-        if self.current_setup.index(0) == len(self.current_setup) - 1:
-            return 0
-
-        return 1
 
     def get_successors(self):
         # this method will return all the successors of the current setup by applying all the possible actions
@@ -337,4 +342,36 @@ class Puzzle:
                 continue
 
         return successor_puzzles
+
+
+    def get_heuristic(self, h=None):
+        # this method will return the value of the heuristic
+
+        if h == 'h1':
+            return self.get_h1()
+        elif h == 'h2':
+            return self.get_h1()
+        elif h == 'h0':
+            return self.get_h0()
+
+        return 0
+
+    def get_h0(self):
+        # this is the naive heuristic, h0 that will be used for the demo
+
+        if self.current_setup.index(0) == len(self.current_setup) - 1:
+            return 0
+
+        return 1
+
+    def get_h1(self):
+        # TODO: implement heuristic h1 here
+
+        return 0
+
+    def get_h2(self):
+        # TODO: implement heuristic h2 here
+
+        return 0
+
 

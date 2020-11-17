@@ -7,12 +7,13 @@ class Node:
     # this will be a static variable to store all the previously visited setups
     # visited_setups = []
 
-    def __init__(self, puzzle: Puzzle, parent, arriving_move, move_cost):
+    def __init__(self, puzzle: Puzzle, parent, arriving_move, move_cost, moved_tile, heuristic_function=None):
 
         self.puzzle = puzzle
         self.parent = parent
         self.arriving_move = arriving_move
-        self.move_cost = move_cost  # the cost of the immediate step that made us arrive at this node
+        self.move_cost = move_cost
+        self.moved_tile = moved_tile
 
         # record the depth of the node
         self.depth = 0
@@ -25,6 +26,14 @@ class Node:
             self.total_cost = move_cost + self.parent.total_cost
 
         self.child_nodes = []
+
+        self.heuristic_function = heuristic_function
+
+        # h(n) or the heuristic value of the node
+        self.h_n = self.puzzle.get_heuristic(heuristic_function)
+        # the cost of the immediate step that made us arrive at this node
+        self.g_n = move_cost
+        self.f_n = self.h_n + self.g_n
 
     def expand(self):
         # This method will expand the current node by applying all the possible moves to the puzzle and it
@@ -42,7 +51,8 @@ class Node:
 
             arriving_move = puzzle_tuple[1]
             move_cost = puzzle_tuple[2]
-            child_node = Node(puzzle, self, arriving_move, move_cost)
+            moved_tile = puzzle_tuple[3]
+            child_node = Node(puzzle, self, arriving_move, move_cost, moved_tile, self.heuristic_function)
             self.child_nodes.append(child_node)
 
         return self.child_nodes
@@ -55,10 +65,6 @@ class Node:
             return True
 
         return False
-
-    def heuristic(self):
-        # return the heuristic of the puzzle
-        return self.puzzle.get_heuristic()
 
     def is_goal(self):
         # return true if the puzzle is goal else false
