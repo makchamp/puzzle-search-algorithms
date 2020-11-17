@@ -40,18 +40,19 @@ if __name__ == "__main__":
         sys.exit()        
 
     # Run each search algorithm on each puzzle
-    for puzzle in puzzles:
-        print(f"\nPuzzle {puzzle.get_puzzle_num()}:")
+    # for puzzle in puzzles:
+    #     print(f"\nPuzzle {puzzle.get_puzzle_num()}:")
 
-        ucs = UniformCost(puzzle)
-        ucs.search()
+    #     ucs = UniformCost(puzzle)
+    #     ucs.search()
 
-        gbfs = GreedyBestFirst(puzzle)
-        gbfs.search()
+    #     gbfs = GreedyBestFirst(puzzle)
+    #     gbfs.search()
 
-        astar = AStar(puzzle)
-        astar.search()
-
+    #     astar = AStar(puzzle)
+    #     astar.search()
+    ucs = UniformCost(puzzles[0])
+    ucs.search()
 
 
 

@@ -7,13 +7,14 @@ class Node:
     # this will be a static variable to store all the previously visited setups
     # visited_setups = []
 
-    def __init__(self, puzzle: Puzzle, parent, arriving_move, move_cost, moved_tile, heuristic_function=None):
+    def __init__(self, puzzle: Puzzle, parent, arriving_move, move_cost, moved_tile, cost_to_reach, heuristic_function=None):
 
         self.puzzle = puzzle
         self.parent = parent
         self.arriving_move = arriving_move
         self.move_cost = move_cost
         self.moved_tile = moved_tile
+        self.cost_to_reach = cost_to_reach
 
         # record the depth of the node
         self.depth = 0
@@ -31,7 +32,7 @@ class Node:
 
         # h(n) or the heuristic value of the node
         self.h_n = self.puzzle.get_heuristic(heuristic_function)
-        
+
         # the cost of the immediate step that made us arrive at this node
 
         # self.g_n = move_cost
@@ -54,7 +55,8 @@ class Node:
             arriving_move = puzzle_tuple[1]
             move_cost = puzzle_tuple[2]
             moved_tile = puzzle_tuple[3]
-            child_node = Node(puzzle, self, arriving_move, move_cost, moved_tile, self.heuristic_function)
+            cost_to_reach = self.cost_to_reach + move_cost 
+            child_node = Node(puzzle, self, arriving_move, move_cost, moved_tile, cost_to_reach, self.heuristic_function)
             self.child_nodes.append(child_node)
 
         return self.child_nodes
@@ -68,6 +70,16 @@ class Node:
 
         return False
 
+    def __str__(self):
+        # "to_String" method
+        # the token to move, a space, the cost of the move, a space, 
+        # the new configurationof the board (each tile separated by a space)
+        # TODO: use s instead of debug when generating solution files
+        debug = f"moved tile:{self.moved_tile} | move cost:{self.move_cost} | cost_to_reach:{self.cost_to_reach} --> {self.puzzle}"
+        s = f"{self.moved_tile} {self.move_cost} {self.puzzle}"
+        return debug
+
     def is_goal(self):
         # return true if the puzzle is goal else false
         return self.puzzle.is_goal()
+
