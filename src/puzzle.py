@@ -352,7 +352,7 @@ class Puzzle:
         if h == 'h1':
             return self.get_h1()
         elif h == 'h2':
-            return self.get_h1()
+            return self.get_h2()
         elif h == 'h0':
             return self.get_h0()
 
