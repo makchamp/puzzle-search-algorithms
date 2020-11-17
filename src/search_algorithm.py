@@ -20,6 +20,9 @@ class SearchAlgorithm:
         # execution time for the search algorithm
         self.exec_time = 0
 
+        # Time to stop execution(with no solution found)
+        self.timeout = 60 # 60 seconds
+
     def search(self):
         # Add the code for the search algorithm here
         # you should calculate the execution time and the total cost of the solution path

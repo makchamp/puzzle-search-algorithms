@@ -183,7 +183,7 @@ class Puzzle:
         new_setup[empty_tile_location] = new_setup[replacement_tile_position]
         new_setup[replacement_tile_position] = 0
 
-        print("move_right applied")
+        #print("move_right applied")
         new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
         move_name = "move_right"
         move_cost = self.move_cost[move_name]
@@ -267,7 +267,7 @@ class Puzzle:
         new_setup[empty_tile_location] = new_setup[replacement_tile_position]
         new_setup[replacement_tile_position] = 0
 
-        print("move_diagonal_short applied")
+        #print("move_diagonal_short applied")
         new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
         move_name = "move_diagonal_short"
         move_cost = self.move_cost[move_name]
@@ -299,7 +299,7 @@ class Puzzle:
         new_setup[empty_tile_location] = new_setup[replacement_tile_position]
         new_setup[replacement_tile_position] = 0
 
-        print("move_diagonal_long applied")
+        #print("move_diagonal_long applied")
         new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
         move_name = "move_diagonal_long"
         move_cost = self.move_cost[move_name]
