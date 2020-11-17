@@ -35,16 +35,18 @@ class SearchAlgorithm:
 
     def generate_output_files(self):
         # generate output files
+        
         self.generate_solution_path_output_file()
         self.generate_search_path_output_file()
 
 
     def generate_search_path_output_file(self):
+        output_dir = "solution_files/"
         # generate search path file
-        file_name = self.puzzle_number + '_'
-        file_name += '' if self.heuristic is None else '-' + self.heuristic
+        file_name = str(self.puzzle_number) + '_' + self.algorithm_name + '_'
+        file_name += '' if self.heuristic is None else '-' + str(self.heuristic) + '_'
 
-        search_path_file_name = file_name + '_search'
+        search_path_file_name = file_name + 'search'
 
         search_path_file_content = ''
 
@@ -52,30 +54,35 @@ class SearchAlgorithm:
             search_path_file_content += f'{node.f_n} {node.g_n} {node.h_n} {node.puzzle}\n'
 
         # write search_path file content into the search
-        search_path_file = open(search_path_file_name, "w")
+        search_path_file = open(output_dir + search_path_file_name, "w")
         search_path_file.write(search_path_file_content)
         search_path_file.close()
 
     def generate_solution_path_output_file(self):
+        output_dir = "solution_files/"
         # generate search path file
-        file_name = self.puzzle_number + '_'
-        file_name += '' if self.heuristic is None else '-' + self.heuristic
+        file_name = str(self.puzzle_number) + '_' + self.algorithm_name + '_'
+        file_name += '' if self.heuristic is None else '-' + str(self.heuristic) + '_'
 
-        solution_path_file_name = file_name + '_solution.txt'
+        solution_path_file_name = file_name + 'solution.txt'
 
         solution_path_file_content = ''
 
-        for index, node in enumerate(self.search_path,  start=0):
-            if index == 0:
-                solution_path_file_content += f'0 0 {node.puzzle}\n'
-            else:
-                solution_path_file_content += f'{node.moved_tile} {node.move_cost} {node.puzzle}\n'
+        # for index, node in enumerate(self.search_path,  start=0):
+        #     if index == 0:
+        #         solution_path_file_content += f'0 0 {node.puzzle}\n'
+        #     else:
+        #         solution_path_file_content += f'{node.moved_tile} {node.move_cost} {node.puzzle}\n'
 
-        solution_path_file_content += f'{self.total_cost} {self.exec_time}'
+        for node in self.solution_path:
+            solution_path_file_content += f'{node.moved_tile} {node.move_cost} {node.puzzle}\n'
+
+
+        solution_path_file_content += f'{self.total_cost} {self.exec_time}\n'
 
         # write search_path file content into the search
-        solution_path_file = open(solution_path_file_name, "w")
-        solution_path_file.write(solution_path_file_name)
+        solution_path_file = open(output_dir + solution_path_file_name, "w")
+        solution_path_file.write(solution_path_file_content)
         solution_path_file.close()
 
 

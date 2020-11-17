@@ -31,12 +31,12 @@ class Node:
         self.heuristic_function = heuristic_function
 
         # h(n) or the heuristic value of the node
-        self.h_n = self.puzzle.get_heuristic(heuristic_function)
+        self.h_n = self.puzzle.get_heuristic(heuristic_function) or 0
 
         # the cost of the immediate step that made us arrive at this node
 
-        # self.g_n = move_cost
-        # self.f_n = self.h_n + self.g_n
+        self.g_n = move_cost
+        self.f_n = self.h_n + self.g_n
 
     def expand(self):
         # This method will expand the current node by applying all the possible moves to the puzzle and it
@@ -74,7 +74,6 @@ class Node:
         # "to_String" method
         # the token to move, a space, the cost of the move, a space, 
         # the new configurationof the board (each tile separated by a space)
-        # TODO: use s instead of debug when generating solution files
         debug = f"moved tile:{self.moved_tile} | move cost:{self.move_cost} | cost_to_reach:{self.cost_to_reach} --> {self.puzzle}"
         s = f"{self.moved_tile} {self.move_cost} {self.puzzle}"
         return debug

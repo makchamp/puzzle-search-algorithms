@@ -24,11 +24,28 @@ class UniformCost(SearchAlgorithm):
 
         if self.open_nodes[0].is_goal():
             print (f"Found solution {self.open_nodes[0]}")
+            self.generate_solution_path()
+           
         else:
-            print (f"No solutuion")
+            print (f"No solution")
 
         self.exec_time = time.time() - start
+        self.total_cost = self.open_nodes[0].cost_to_reach
+        self.search_path = self.closed_nodes
+
+        self.generate_output_files()
+
         print(f"Execution time {self.exec_time}")
+
+
+    # Override
+    def generate_solution_path(self):
+        current_node = self.open_nodes[0]
+        self.solution_path.append(current_node)
+        while (current_node != None):
+            parent_node = current_node.parent
+            self.solution_path.append(parent_node)
+            current_node = parent_node 
 
 
 
