@@ -11,9 +11,11 @@ class Puzzle:
         'move_up': 1
     }
 
-    def __init__(self, rows, setup, goal_setups=None):
+    def __init__(self, rows, setup, goal_setups=None, puzzle_number=None):
 
-        self.current_setup: [] = setup
+        self.initial_setup: [] = setup
+        self.current_setup: [] = self.initial_setup
+        self.puzzle_number = puzzle_number
 
         if rows < 2:
             raise Exception('there has to be at least two rows')
@@ -373,5 +375,14 @@ class Puzzle:
         # TODO: implement heuristic h2 here
 
         return 0
+    
+    def get_num_of_rows(self):
+        return self.rows
+
+    def get_puzzle_num(self):
+        return self.puzzle_number
+
+    def get_initial_setup(self):
+        return self.initial_setup               
 
 

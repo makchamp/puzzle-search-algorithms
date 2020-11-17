@@ -31,9 +31,11 @@ class Node:
 
         # h(n) or the heuristic value of the node
         self.h_n = self.puzzle.get_heuristic(heuristic_function)
+        
         # the cost of the immediate step that made us arrive at this node
-        self.g_n = move_cost
-        self.f_n = self.h_n + self.g_n
+
+        # self.g_n = move_cost
+        # self.f_n = self.h_n + self.g_n
 
     def expand(self):
         # This method will expand the current node by applying all the possible moves to the puzzle and it

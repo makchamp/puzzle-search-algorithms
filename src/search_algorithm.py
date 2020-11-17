@@ -3,16 +3,16 @@ from puzzle import Puzzle
 
 class SearchAlgorithm:
 
-    def __init__(self, puzzle_number, initial_setup, rows, heuristic=None):
+    def __init__(self, puzzle, algorithm_name=None, heuristic=None):
 
-        self.puzzle_number = puzzle_number
-        puzzle = Puzzle(rows, initial_setup)
+        self.puzzle = puzzle
+        self.puzzle_number = puzzle.get_puzzle_num()
         self.initial_node = Node(puzzle, None, None, None, None, None)
         self.open_nodes = [self.initial_node]
         self.closed_nodes = []
         self.search_path = []
         self.solution_path = []
-        self.algo_name = ''
+        self.algorithm_name = algorithm_name
         self.heuristic = heuristic
 
         # total cost of the solution path
@@ -75,3 +75,6 @@ class SearchAlgorithm:
         solution_path_file = open(solution_path_file_name, "w")
         solution_path_file.write(solution_path_file_name)
         solution_path_file.close()
+
+    def get_algorithm_name(self):
+        return self.algorithm_name
