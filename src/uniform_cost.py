@@ -13,10 +13,10 @@ class UniformCost(SearchAlgorithm):
         start = time.time()
 
         # Start node
-        n = Node(puzzle=self.puzzle,parent=None, arriving_move=None, move_cost=0,moved_tile=0, cost_to_reach=0 )
+        self.initial_node = Node(puzzle=self.puzzle,parent=None, arriving_move=None, move_cost=0,moved_tile=0, cost_to_reach=0 )
 
         # Add start node to open list
-        self.open_nodes.append(n)
+        self.open_nodes.append(self.initial_node)
 
         while(self.open_nodes[0].is_goal() == False and time.time() < start + self.timeout ):
             # Pop node
@@ -32,21 +32,22 @@ class UniformCost(SearchAlgorithm):
         self.exec_time = time.time() - start
         self.total_cost = self.open_nodes[0].cost_to_reach
         self.search_path = self.closed_nodes
+        print(f"Execution time {self.exec_time}")
 
         self.generate_output_files()
 
-        print(f"Execution time {self.exec_time}")
 
 
     # Override
     def generate_solution_path(self):
         current_node = self.open_nodes[0]
         self.solution_path.append(current_node)
-        while (current_node != None):
+        while (current_node is not None):
+            if current_node.parent is None:
+                break
             parent_node = current_node.parent
             self.solution_path.append(parent_node)
             current_node = parent_node 
-
 
 
 

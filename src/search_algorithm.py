@@ -7,6 +7,7 @@ class SearchAlgorithm:
 
         self.puzzle = puzzle
         self.puzzle_number = puzzle.get_puzzle_num()
+        self.initial_node = None
         self.open_nodes = []
         self.closed_nodes = []
         self.search_path = []
@@ -68,15 +69,8 @@ class SearchAlgorithm:
 
         solution_path_file_content = ''
 
-        # for index, node in enumerate(self.search_path,  start=0):
-        #     if index == 0:
-        #         solution_path_file_content += f'0 0 {node.puzzle}\n'
-        #     else:
-        #         solution_path_file_content += f'{node.moved_tile} {node.move_cost} {node.puzzle}\n'
-
         for node in self.solution_path:
             solution_path_file_content += f'{node.moved_tile} {node.move_cost} {node.puzzle}\n'
-
 
         solution_path_file_content += f'{self.total_cost} {self.exec_time}\n'
 
