@@ -1,92 +1,35 @@
+import sys
 from puzzle import Puzzle
-from pprint import pprint
-
-setup_1 = [0,2,3,1,4,6,2,5]
-setup_2 = [1,2,3,0,4,6,2,5]
-setup_3 = [1,2,3,4,0,6,2,5]
-setup_4 = [1,2,3,4,5,6,2,0]
-setup_5 = [1,2,3,4,5,6,7,0,9,10,11,8]
 
 
-puzzle = Puzzle(2, setup_1)
-print('\n')
-print(puzzle)
-print(puzzle.possible_moves())
+def load_puzzles(puzzles_file=None):
+    """
+    Loads puzzles from disc
+    """
+    if puzzles_file == None:  # Retrieve puzzles from default file
+        puzzles_file = "puzzles.txt"
+
+    with open(puzzles_file) as pf:
+        lines = [line.rsplit() for line in pf]  # Each line represents a puzzle
+
+    puzzles = []
+    num_of_rows = 2
+    for line in lines:
+        # Convert entries from 'str' to 'int'
+        puzzles.append(Puzzle(rows=num_of_rows, setup=[int(i) for i in line]))
+
+    print(f"Loaded {len(puzzles)} puzzles from disc:")
+    for i, puzzle in enumerate(puzzles, start=1):
+        print(f"Puzzle {i}: [{puzzle}]")
+    return puzzles
 
 
-puzzle = Puzzle(2,setup_2)
-print('\n')
-print(puzzle)
-print(puzzle.possible_moves())
+if __name__ == "__main__":
 
-
-puzzle = Puzzle(2,setup_3)
-print('\n')
-print(puzzle)
-print(puzzle.possible_moves())
-
-
-
-puzzle = Puzzle(2,setup_4)
-print('\n')
-print(puzzle)
-print(puzzle.possible_moves())
-
-
-
-puzzle = Puzzle(2,setup_5)
-print('\n')
-print(puzzle)
-print(puzzle.possible_moves())
-
-
-puzzle = Puzzle(3,setup_5)
-print('\n')
-print(puzzle)
-print(puzzle.possible_moves())
-
-
-
-puzzle = Puzzle(4,setup_5)
-print('\n')
-print(puzzle)
-print(puzzle.possible_moves())
-
-setup_6 = [1, 2, 3, 4, 5, 6, 7, 0, 9, 10, 11, 8]
-puzzle = Puzzle(3,setup_6)
-print('\n')
-print(puzzle)
-print(puzzle.possible_moves())
-
-puzzle = Puzzle(4, [1, 2, 7, 4, 6, 3, 11, 5, 0, 8, 10, 9])
-print(puzzle)
-print(puzzle.possible_moves())
-print(puzzle.is_empty_tile_corner())
-print(puzzle.move_diagonal_short())
-
-# puzzle = Puzzle(6,setup_5)
-# print('\n')
-# print(puzzle)
-#
-# puzzle = Puzzle(1,setup_5)
-# print('\n')
-# print(puzzle)
-#
-# puzzle = Puzzle(12,setup_5)
-# print('\n')
-# print(puzzle)
-
-
-# puzzle.move_right()
-# print(puzzle)
-
-# puzzle.move_vertically()
-# print(puzzle)
-
-
-# puzzle.move_vertically()
-# print(puzzle)
-
-# puzzle.move_left()
-# print(puzzle)
-
+    try:
+        if len(sys.argv) == 1:  # No argument passed, get puzzles from default puzzles file
+            load_puzzles()
+        else:
+            load_puzzles(sys.argv[1])
+    except:
+        sys.exit()
