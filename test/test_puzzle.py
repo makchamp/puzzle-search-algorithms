@@ -1,3 +1,6 @@
+import sys 
+sys.path.insert(0, 'src')
+
 from puzzle import Puzzle
 
 def test_possible_moves_2x4():

@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, 'src')
+
 from node import Node
 from puzzle import Puzzle
 

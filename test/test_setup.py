@@ -1,3 +1,7 @@
+
+import sys
+sys.path.insert(0, 'src')
+
 from puzzle import Puzzle
 from pprint import pprint
 

@@ -1,7 +1,6 @@
 import sys
 from puzzle import Puzzle
 
-
 def load_puzzles(puzzles_file=None):
     """
     Loads puzzles from disc
@@ -26,10 +25,19 @@ def load_puzzles(puzzles_file=None):
 
 if __name__ == "__main__":
 
+    puzzles = []  # The input puzzles  
     try:
         if len(sys.argv) == 1:  # No argument passed, get puzzles from default puzzles file
-            load_puzzles()
+            puzzles = load_puzzles()
         else:
-            load_puzzles(sys.argv[1])
-    except:
-        sys.exit()
+            puzzles = load_puzzles(sys.argv[1])
+    except Exception as e:
+        print(e)
+        print("Error trying to load puzzles from disc")
+        sys.exit()        
+
+    # Run search algorithms on each puzzle
+    
+
+
+
