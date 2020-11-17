@@ -5,7 +5,7 @@ class Node:
     # this is a node in the tree on which we will apply a search algorithm
 
     # this will be a static variable to store all the previously visited setups
-    visited_setups = []
+    # visited_setups = []
 
     def __init__(self, puzzle: Puzzle, parent, arriving_move, move_cost):
 
@@ -36,8 +36,9 @@ class Node:
             puzzle = puzzle_tuple[0]
 
             # check if puzzle has been visited before
-            if puzzle.current_setup in self.visited_setups:
-                continue
+            # TODO: check for the visited setups (or nodes) in the algorithm
+            # if puzzle.current_setup in self.visited_setups:
+            #     continue
 
             arriving_move = puzzle_tuple[1]
             move_cost = puzzle_tuple[2]
@@ -45,3 +46,20 @@ class Node:
             self.child_nodes.append(child_node)
 
         return self.child_nodes
+
+    def __eq__(self, other):
+        # check if two nodes are equal
+
+        if self.puzzle.current_setup == self.puzzle.current_setup \
+                and self.puzzle.rows == self.puzzle.rows:
+            return True
+
+        return False
+
+    def heuristic(self):
+        # return the heuristic of the puzzle
+        return self.puzzle.get_heuristic()
+
+    def is_goal(self):
+        # return true if the puzzle is goal else false
+        return self.puzzle.is_goal()
