@@ -27,6 +27,7 @@ class GreedyBestFirst(SearchAlgorithm):
         if self.open_nodes[0].is_goal():
             print(f"Found solution {self.open_nodes[0]}")
             self.generate_solution_path()
+            self.solution_found = True
 
         else:
             print(f"No solution")

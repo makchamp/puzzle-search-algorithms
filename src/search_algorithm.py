@@ -22,7 +22,9 @@ class SearchAlgorithm:
         self.exec_time = 0
 
         # Time to stop execution(with no solution found)
-        self.timeout = 60 # 60 seconds
+        self.timeout = 10 # 60 seconds
+
+        self.solution_found = False
 
     def search(self):
         # Add the code for the search algorithm here
@@ -51,8 +53,11 @@ class SearchAlgorithm:
 
         search_path_file_content = ''
 
-        for node in self.search_path:
-            search_path_file_content += f'{node.f_n} {node.g_n} {node.h_n} {node.puzzle}\n'
+        if self.solution_found:
+            for node in self.search_path:
+                search_path_file_content += f'{node.f_n} {node.g_n} {node.h_n} {node.puzzle}\n'
+        else:
+            search_path_file_content = "no solution"
 
         # write search_path file content into the search
         search_path_file = open(output_dir + search_path_file_name, "w")
@@ -66,13 +71,16 @@ class SearchAlgorithm:
         file_name += '' if self.heuristic is None else '-' + str(self.heuristic) + '_'
 
         solution_path_file_name = file_name + 'solution.txt'
-
+        
         solution_path_file_content = ''
 
-        for node in self.solution_path:
-            solution_path_file_content += f'{node.moved_tile} {node.move_cost} {node.puzzle}\n'
+        if self.solution_found:
+            for node in self.solution_path:
+                solution_path_file_content += f'{node.moved_tile} {node.move_cost} {node.puzzle}\n'
 
-        solution_path_file_content += f'{self.total_cost} {self.exec_time}\n'
+            solution_path_file_content += f'{self.total_cost} {self.exec_time}\n'
+        else:
+            solution_path_file_content = "no solution"
 
         # write search_path file content into the search
         solution_path_file = open(output_dir + solution_path_file_name, "w")
