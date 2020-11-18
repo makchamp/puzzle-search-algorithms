@@ -51,7 +51,6 @@ class AStar(SearchAlgorithm):
 
     # Override
     def sort(self):
-        # Sorts by cost by default, override to sort by heuristic
         self.open_nodes = sorted(self.open_nodes, key=lambda n: n.f_n)
 
     # Override
@@ -65,18 +64,24 @@ class AStar(SearchAlgorithm):
         self.closed_nodes.append(n)
         # Add child nodes of the popped node to open list and sort
         for child_node in n.child_nodes:
-            # Check if node has already been visited
-            if child_node.puzzle.current_setup not in self.closed_puzzles():
-    
-            # Replace node if cost is lower
-                replace = False
-                for i, node in enumerate(self.open_nodes, start=0):
-                    if child_node.puzzle.current_setup == node.puzzle.current_setup:
-                        replace = True
-                        if child_node.f_n < node.f_n:
-                            self.open_nodes[i] = child_node
-                            break
-                if replace == False:                           
-                    self.open_nodes.append(child_node)
 
-        self.sort()        
+            # If s is already in closed
+            if self.replace_if_lower(child_node, self.closed_nodes, remove_node=True):
+                continue
+            elif self.replace_if_lower(child_node, self.open_nodes, remove_node=False):
+                continue
+            else:                          
+                self.open_nodes.append(child_node)
+
+        self.sort()
+
+
+    def replace_if_lower(self, child_node, node_list, remove_node):
+        for i, node in enumerate(node_list, start=0):
+            if child_node.puzzle.current_setup == node.puzzle.current_setup:
+                if child_node.f_n < node.f_n:
+                    self.open_nodes[i] = child_node
+                    if remove_node:
+                       del self.closed_nodes[i]
+                return True
+        return False                    

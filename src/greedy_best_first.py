@@ -52,7 +52,6 @@ class GreedyBestFirst(SearchAlgorithm):
 
 
     def sort(self):
-        # Sorts by cost by default, override to sort by heuristic
         self.open_nodes = sorted(self.open_nodes, key=lambda n: n.h_n)
 
 
@@ -69,7 +68,7 @@ class GreedyBestFirst(SearchAlgorithm):
             # Check if node has already been visited
             if child_node.puzzle.current_setup not in self.closed_puzzles():
     
-            # Replace node if cost is lower
+            # Replace node if h is lower
                 replace = False
                 for i, node in enumerate(self.open_nodes, start=0):
                     if child_node.puzzle.current_setup == node.puzzle.current_setup:
