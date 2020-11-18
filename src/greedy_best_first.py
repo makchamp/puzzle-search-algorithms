@@ -27,6 +27,7 @@ class GreedyBestFirst(SearchAlgorithm):
         if self.open_nodes[0].is_goal():
             print(f"Found solution {self.open_nodes[0]}")
             self.generate_solution_path()
+            self.solution_found = True
 
         else:
             print(f"No solution")
@@ -52,7 +53,7 @@ class GreedyBestFirst(SearchAlgorithm):
 
     def sort(self):
         # Sorts by cost by default, override to sort by heuristic
-        self.open_nodes = sorted(self.open_nodes, key=lambda n: n.f_n)
+        self.open_nodes = sorted(self.open_nodes, key=lambda n: n.h_n)
 
 
     def pop_node(self):
@@ -73,7 +74,7 @@ class GreedyBestFirst(SearchAlgorithm):
                 for i, node in enumerate(self.open_nodes, start=0):
                     if child_node.puzzle.current_setup == node.puzzle.current_setup:
                         replace = True
-                        if child_node.f_n < node.f_n:
+                        if child_node.h_n < node.h_n:
                             self.open_nodes[i] = child_node
                             break
                 if replace == False:                           

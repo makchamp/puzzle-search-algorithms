@@ -367,15 +367,35 @@ class Puzzle:
         return 1
 
     def get_h1(self):
-        # TODO: implement heuristic h1 here
+        # Hamming distance: calculate how many tiles are out of place compared to the goal states
 
-        return 0
+        misplaced_tiles_count_list = []
+
+        # calculate how many misplaced tiles are in the current setup compared to all goal setups
+        for goal_setup in self.goal_setups:
+            misplaced_tiles_count = 0
+
+            for i in range(0, len(self.current_setup)):
+                if self.current_setup[i] != goal_setup[i]:
+                    misplaced_tiles_count += 1
+
+            misplaced_tiles_count_list.append(misplaced_tiles_count)
+
+        # return the minimum count of misplaced tiles
+        return min(misplaced_tiles_count_list)
 
     def get_h2(self):
-        # TODO: implement heuristic h2 here
+        # this heuristic calculates the sum of permutation inversions
 
-        return 0
-    
+        per_goal_setup_calculation_list = []
+
+        # calculate how many misplaced tiles are in the current setup compared to all goal setups
+        for goal_setup in self.goal_setups:
+            per_goal_setup_calculation_list.append(self.sum_of_permutation_inversions(goal_setup))
+
+        # return the minimum of the sums
+        return min(per_goal_setup_calculation_list)
+
     def get_num_of_rows(self):
         return self.rows
 
@@ -384,5 +404,30 @@ class Puzzle:
 
     def get_initial_setup(self):
         return self.initial_setup               
+
+    def sum_of_permutation_inversions(self, goal_setup):
+        # print(goal_setup)
+        sum_of_permutation = 1
+        # for each tile, calculate how many tiles on the right should be on its left in the goal setup
+        for i in range(0, len(self.current_setup)):
+            current_tile = self.current_setup[i]
+
+            if current_tile == 0:
+                continue
+
+            tiles_on_the_right = self.current_setup[i+1:]
+            tile_index_in_goal_setup = goal_setup.index(current_tile)
+            tiles_on_the_left = goal_setup[:tile_index_in_goal_setup]
+            common_tiles = [tile for tile in tiles_on_the_right if tile in tiles_on_the_left]
+            sum_of_permutation += len(common_tiles)
+
+            # print(f'\n\ncurrent_tile {current_tile}')
+            # print(f'tiles_on_the_right {tiles_on_the_right}')
+            # print(f'tile_index_in_goal_setup {tile_index_in_goal_setup}')
+            # print(f'tiles_on_the_left {tiles_on_the_left}')
+            # print(f'common_tiles {common_tiles}')
+            # print(f'sum_of_permutation {sum_of_permutation}')
+
+        return sum_of_permutation
 
 
