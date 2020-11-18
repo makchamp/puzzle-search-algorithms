@@ -43,8 +43,6 @@ if __name__ == "__main__":
     for puzzle in puzzles:
         print(f"\nPuzzle {puzzle.get_puzzle_num()}:")
 
-
-
         ucs = UniformCost(puzzle)
         ucs.search()
 
