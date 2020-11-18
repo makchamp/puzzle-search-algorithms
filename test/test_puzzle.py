@@ -1,7 +1,7 @@
 import sys 
 sys.path.insert(0, 'src')
 
-from puzzle import Puzzle
+from src.puzzle import Puzzle
 
 def test_possible_moves_2x4():
     setup_1 = [0, 2, 3, 1, 4, 6, 7, 5]
@@ -335,3 +335,27 @@ def test_move_diagonal_long():
     assert puzzle.move_diagonal_long()[2] == 3
 
     return
+
+def test_h1():
+    puzzle = Puzzle(2, [1, 2, 3, 4, 0, 6, 7, 5])
+    assert puzzle.get_heuristic('h1') == 2
+
+    puzzle = Puzzle(2, [1, 2, 3, 4, 6, 0, 7, 5])
+    assert puzzle.get_heuristic('h1') == 3
+
+    puzzle = Puzzle(4, [1, 2, 7, 4, 6, 3, 11, 5, 8, 0, 10, 9], goal_setups=[[1,2,3,4,5,6,7,8,9,10,11,0]])
+    assert puzzle.get_heuristic('h1') == 9
+
+
+def test_h2():
+    puzzle = Puzzle(2, [1, 2, 3, 4, 5, 6, 0, 7])
+    assert puzzle.get_heuristic('h2') == 1
+
+    # puzzle = Puzzle(2, [1, 2, 3, 4, 6, 0, 7, 5])
+    # assert puzzle.get_heuristic('h2') == 3
+    #
+    # puzzle = Puzzle(4, [1, 2, 7, 4, 6, 3, 11, 5, 8, 0, 10, 9], goal_setups=[[1,2,3,4,5,6,7,8,9,10,11,0]])
+    # assert puzzle.get_heuristic('h2') == 9
+
+    puzzle = Puzzle(3, [5, 0, 8, 4, 2, 1, 7, 3, 6], goal_setups=[[1,2,3,4,5,6,7,8,0]])
+    assert puzzle.get_heuristic('h2') == 17
