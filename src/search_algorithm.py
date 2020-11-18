@@ -10,8 +10,8 @@ class SearchAlgorithm:
         self.initial_node = None
         self.open_nodes = []
         self.closed_nodes = []
-        self.search_path = []
-        self.solution_path = []
+        self.search_path: [] = []
+        self.solution_path: [] = []
         self.algorithm_name = algorithm_name
         self.heuristic = heuristic
 
@@ -22,7 +22,7 @@ class SearchAlgorithm:
         self.exec_time = 0
 
         # Time to stop execution(with no solution found)
-        self.timeout = 10 # 60 seconds
+        self.timeout = 60 # 60 seconds
 
         self.solution_found = False
 
@@ -46,14 +46,15 @@ class SearchAlgorithm:
     def generate_search_path_output_file(self):
         output_dir = "solution_files/"
         # generate search path file
-        file_name = str(self.puzzle_number) + '_' + self.algorithm_name + '_'
-        file_name += '' if self.heuristic is None else '-' + str(self.heuristic) + '_'
+        file_name = str(self.puzzle_number) + '_' + self.algorithm_name
+        file_name += '' if self.heuristic is None else '-' + str(self.heuristic)
 
-        search_path_file_name = file_name + 'search'
+        search_path_file_name = file_name + '_search.txt'
 
         search_path_file_content = ''
 
         if self.solution_found:
+            self.search_path.reverse()
             for node in self.search_path:
                 search_path_file_content += f'{node.f_n} {node.g_n} {node.h_n} {node.puzzle}\n'
         else:
@@ -67,14 +68,15 @@ class SearchAlgorithm:
     def generate_solution_path_output_file(self):
         output_dir = "solution_files/"
         # generate search path file
-        file_name = str(self.puzzle_number) + '_' + self.algorithm_name + '_'
-        file_name += '' if self.heuristic is None else '-' + str(self.heuristic) + '_'
+        file_name = str(self.puzzle_number) + '_' + self.algorithm_name
+        file_name += '' if self.heuristic is None else '-' + str(self.heuristic)
 
-        solution_path_file_name = file_name + 'solution.txt'
+        solution_path_file_name = file_name + '_solution.txt'
         
         solution_path_file_content = ''
 
         if self.solution_found:
+            self.solution_path.reverse()
             for node in self.solution_path:
                 solution_path_file_content += f'{node.moved_tile} {node.move_cost} {node.puzzle}\n'
 
