@@ -35,7 +35,7 @@ class Node:
 
         # the cost of the immediate step that made us arrive at this node
 
-        self.g_n = move_cost
+        self.g_n = cost_to_reach
         self.f_n = self.h_n + self.g_n
 
     def expand(self):

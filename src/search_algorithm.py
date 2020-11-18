@@ -82,7 +82,7 @@ class SearchAlgorithm:
 
     def sort(self):
         # Sorts by cost by default, override to sort by heuristic
-        self.open_nodes = sorted(self.open_nodes, key=lambda n: n.move_cost)
+        self.open_nodes = sorted(self.open_nodes, key=lambda n: n.cost_to_reach)
 
 
     def pop_node(self):
@@ -97,12 +97,18 @@ class SearchAlgorithm:
         for child_node in n.child_nodes:
             # Check if node has already been visited
             if child_node.puzzle.current_setup not in self.closed_puzzles():
-                self.open_nodes.append(child_node)
-
+    
             # Replace node if cost is lower
+                replace = False
                 for i, node in enumerate(self.open_nodes, start=0):
-                    if child_node.puzzle.current_setup == node.puzzle.current_setup and child_node.cost_to_reach < node.cost_to_reach:
-                        self.open_nodes[i] = child_node
+                    if child_node.puzzle.current_setup == node.puzzle.current_setup:
+                        replace = True
+                        if child_node.cost_to_reach < node.cost_to_reach:
+                            self.open_nodes[i] = child_node
+                            break
+                if replace == False:                           
+                    self.open_nodes.append(child_node)
+
         self.sort()
 
 
@@ -111,6 +117,12 @@ class SearchAlgorithm:
         for node in self.closed_nodes:
             puzzles.append(node.puzzle.current_setup)
         return puzzles
+
+    def open_puzzles(self):
+        puzzles = []
+        for node in self.open_nodes:
+            puzzles.append(node.puzzle.current_setup)
+        return puzzles    
 
 
     def get_algorithm_name(self):
