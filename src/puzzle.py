@@ -141,7 +141,7 @@ class Puzzle:
         new_setup[replacement_tile_position] = 0
 
         # print("move_up applied")
-        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows, goal_setups=self.goal_setups)
         move_name = "move_up"
         move_cost = self.move_cost[move_name]
 
@@ -163,7 +163,7 @@ class Puzzle:
         new_setup[empty_tile_location] = new_setup[replacement_tile_position]
         new_setup[replacement_tile_position] = 0
 
-        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows, goal_setups=self.goal_setups)
         move_name = "move_down"
         move_cost = self.move_cost[move_name]
 
@@ -186,7 +186,7 @@ class Puzzle:
         new_setup[replacement_tile_position] = 0
 
         #print("move_right applied")
-        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows, goal_setups=self.goal_setups)
         move_name = "move_right"
         move_cost = self.move_cost[move_name]
 
@@ -208,7 +208,7 @@ class Puzzle:
         new_setup[empty_tile_location] = new_setup[replacement_tile_position]
         new_setup[replacement_tile_position] = 0
 
-        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows, goal_setups=self.goal_setups)
         move_name = "move_left"
         move_cost = self.move_cost[move_name]
 
@@ -239,7 +239,7 @@ class Puzzle:
         new_setup[empty_tile_location] = new_setup[replacement_tile_position]
         new_setup[replacement_tile_position] = 0
 
-        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows, goal_setups=self.goal_setups)
         move_name = "move_wrapping"
         move_cost = self.move_cost[move_name]
         replacement_tile = self.current_setup[replacement_tile_position]
@@ -270,7 +270,7 @@ class Puzzle:
         new_setup[replacement_tile_position] = 0
 
         #print("move_diagonal_short applied")
-        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows, goal_setups=self.goal_setups)
         move_name = "move_diagonal_short"
         move_cost = self.move_cost[move_name]
 
@@ -302,7 +302,7 @@ class Puzzle:
         new_setup[replacement_tile_position] = 0
 
         #print("move_diagonal_long applied")
-        new_puzzle = Puzzle(setup=new_setup, rows=self.rows)
+        new_puzzle = Puzzle(setup=new_setup, rows=self.rows, goal_setups=self.goal_setups)
         move_name = "move_diagonal_long"
         move_cost = self.move_cost[move_name]
 
@@ -378,6 +378,7 @@ class Puzzle:
             misplaced_tiles_count = 0
 
             for i in range(0, len(self.current_setup)):
+
                 if self.current_setup[i] != goal_setup[i]:
                     misplaced_tiles_count += 1
 
@@ -393,8 +394,8 @@ class Puzzle:
 
         # calculate how many misplaced tiles are in the current setup compared to all goal setups
         for goal_setup in self.goal_setups:
-            misplaced_rows = self.calculate_misplaced_rows(goal_setup)
-            misplaced_cols = self.calculate_misplaced_columns(goal_setup)
+            misplaced_rows = self.calculate_misplaced_rows(goal_setup.copy())
+            misplaced_cols = self.calculate_misplaced_columns(goal_setup.copy())
             misplaced_rows = int(math.ceil(misplaced_rows/2))
             misplaced_cols = int(math.ceil(misplaced_cols/2))
 
