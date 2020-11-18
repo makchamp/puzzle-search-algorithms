@@ -83,5 +83,5 @@ class AStar(SearchAlgorithm):
                     self.open_nodes[i] = child_node
                     if remove_node:
                        del self.closed_nodes[i]
-                    return True
+                return True
         return False                    
