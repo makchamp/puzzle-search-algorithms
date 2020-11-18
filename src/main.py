@@ -43,14 +43,22 @@ if __name__ == "__main__":
     for puzzle in puzzles:
         print(f"\nPuzzle {puzzle.get_puzzle_num()}:")
 
+
+
         ucs = UniformCost(puzzle)
         ucs.search()
 
-        gbfs = GreedyBestFirst(puzzle)
-        gbfs.search()
+        gbfs_h1 = GreedyBestFirst(puzzle, heuristic="h1")
+        gbfs_h1.search()
 
-        astar = AStar(puzzle)
-        astar.search()
+        gbfs_h2 = GreedyBestFirst(puzzle, heuristic="h2")
+        gbfs_h2.search()
+
+        astar_h1 = AStar(puzzle, heuristic="h1")
+        astar_h1.search()
+
+        astar_h2 = AStar(puzzle, heuristic="h2")
+        astar_h2.search()
 
 
 

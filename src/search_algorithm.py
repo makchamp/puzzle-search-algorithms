@@ -111,19 +111,11 @@ class SearchAlgorithm:
 
         self.sort()
 
-
     def closed_puzzles(self):
         puzzles = []
         for node in self.closed_nodes:
             puzzles.append(node.puzzle.current_setup)
         return puzzles
-
-    def open_puzzles(self):
-        puzzles = []
-        for node in self.open_nodes:
-            puzzles.append(node.puzzle.current_setup)
-        return puzzles    
-
 
     def get_algorithm_name(self):
         return self.algorithm_name
