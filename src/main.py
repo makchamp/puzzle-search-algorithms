@@ -83,6 +83,7 @@ if __name__ == "__main__":
     for puzzle in puzzles:
         print(f"\nPuzzle {puzzle.get_puzzle_num()}:")
 
+        # Create and store the results of Uniform Cost Search
         ucs = UniformCost(puzzle)
         ucs.search()
         if ucs.solution_found:
@@ -94,6 +95,7 @@ if __name__ == "__main__":
         results['ucs']['search_path_list'].append(len(ucs.search_path))
 
 
+        # Create and store the results of Greedy Best First with H1
         gbfs_h1 = GreedyBestFirst(puzzle, heuristic="h1")
         gbfs_h1.search()
 
@@ -106,6 +108,7 @@ if __name__ == "__main__":
         results['gbfs_h1']['search_path_list'].append(len(gbfs_h1.search_path))
 
 
+        # Create and store the results of Greedy Best First with H2
         gbfs_h2 = GreedyBestFirst(puzzle, heuristic="h2")
         gbfs_h2.search()
 
@@ -118,6 +121,7 @@ if __name__ == "__main__":
         results['gbfs_h2']['search_path_list'].append(len(gbfs_h2.search_path))
 
 
+        # Create and store the results of A* with H1
         astar_h1 = AStar(puzzle, heuristic="h1")
         astar_h1.search()
 
@@ -130,6 +134,7 @@ if __name__ == "__main__":
         results['astar_h1']['search_path_list'].append(len(astar_h1.search_path))
 
 
+        # Create and store the results of A* with H2
         astar_h2 = AStar(puzzle, heuristic="h2")
         astar_h2.search()
 
@@ -142,7 +147,7 @@ if __name__ == "__main__":
         results['astar_h2']['search_path_list'].append(len(astar_h2.search_path))
 
 
-    # store the results
+    # store the results to csv file
     with open('results.csv', 'w') as results_csv:
         writer = csv.writer(results_csv)
         for method, method_dict in results.items():

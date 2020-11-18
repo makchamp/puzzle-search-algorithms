@@ -1,3 +1,5 @@
+import math
+
 class Puzzle:
 
     # the cost of each move
@@ -385,13 +387,18 @@ class Puzzle:
         return min(misplaced_tiles_count_list)
 
     def get_h2(self):
-        # this heuristic calculates the sum of permutation inversions
+        # this heuristic calculates the max misplaced columns or misplaced rows
 
         per_goal_setup_calculation_list = []
 
         # calculate how many misplaced tiles are in the current setup compared to all goal setups
         for goal_setup in self.goal_setups:
-            per_goal_setup_calculation_list.append(self.sum_of_permutation_inversions(goal_setup))
+            misplaced_rows = self.calculate_misplaced_rows(goal_setup)
+            misplaced_cols = self.calculate_misplaced_columns(goal_setup)
+            misplaced_rows = int(math.ceil(misplaced_rows/2))
+            misplaced_cols = int(math.ceil(misplaced_cols/2))
+
+            per_goal_setup_calculation_list.append(max(misplaced_rows, misplaced_cols))
 
         # return the minimum of the sums
         return min(per_goal_setup_calculation_list)
@@ -405,29 +412,36 @@ class Puzzle:
     def get_initial_setup(self):
         return self.initial_setup               
 
-    def sum_of_permutation_inversions(self, goal_setup):
-        # print(goal_setup)
-        sum_of_permutation = 1
-        # for each tile, calculate how many tiles on the right should be on its left in the goal setup
-        for i in range(0, len(self.current_setup)):
-            current_tile = self.current_setup[i]
+    def calculate_misplaced_rows(self, goal_setup):
 
-            if current_tile == 0:
-                continue
+        num_of_columns = self.columns
+        current_rows = [self.current_setup[i:i+num_of_columns] for i in range(0, len(self.current_setup), num_of_columns)]
+        goal_rows = [goal_setup[i:i+num_of_columns] for i in range(0, len(goal_setup), num_of_columns)]
 
-            tiles_on_the_right = self.current_setup[i+1:]
-            tile_index_in_goal_setup = goal_setup.index(current_tile)
-            tiles_on_the_left = goal_setup[:tile_index_in_goal_setup]
-            common_tiles = [tile for tile in tiles_on_the_right if tile in tiles_on_the_left]
-            sum_of_permutation += len(common_tiles)
+        misplaced_rows = 0
 
-            # print(f'\n\ncurrent_tile {current_tile}')
-            # print(f'tiles_on_the_right {tiles_on_the_right}')
-            # print(f'tile_index_in_goal_setup {tile_index_in_goal_setup}')
-            # print(f'tiles_on_the_left {tiles_on_the_left}')
-            # print(f'common_tiles {common_tiles}')
-            # print(f'sum_of_permutation {sum_of_permutation}')
+        for i in range(0, self.rows):
+            if current_rows[i] != goal_rows[i]:
+                misplaced_rows += 1
 
-        return sum_of_permutation
+        return misplaced_rows
 
+    def calculate_misplaced_columns(self, goal_setup):
 
+        num_of_cols = self.columns
+        current_columns_list = []
+        goal_columns_list = []
+
+        for i in range(0,num_of_cols):
+            column = [self.current_setup[j] for j in range(0, len(self.current_setup)) if j % num_of_cols == i]
+            goal_column = [goal_setup[j] for j in range(0, len(self.current_setup)) if j % num_of_cols == i]
+            current_columns_list.append(column)
+            goal_columns_list.append(goal_column)
+
+        misplaced_cols = 0
+
+        for i in range(0, num_of_cols):
+            if current_columns_list[i] != goal_columns_list[i]:
+                misplaced_cols += 1
+
+        return misplaced_cols

@@ -64,6 +64,7 @@ class SearchAlgorithm:
         search_path_file = open(output_dir + search_path_file_name, "w")
         search_path_file.write(search_path_file_content)
         search_path_file.close()
+        return
 
     def generate_solution_path_output_file(self):
         output_dir = "solution_files/"
@@ -72,7 +73,7 @@ class SearchAlgorithm:
         file_name += '' if self.heuristic is None else '-' + str(self.heuristic)
 
         solution_path_file_name = file_name + '_solution.txt'
-        
+
         solution_path_file_content = ''
 
         if self.solution_found:
@@ -88,7 +89,7 @@ class SearchAlgorithm:
         solution_path_file = open(output_dir + solution_path_file_name, "w")
         solution_path_file.write(solution_path_file_content)
         solution_path_file.close()
-
+        return
 
     def sort(self):
         # Sorts by cost by default, override to sort by heuristic
