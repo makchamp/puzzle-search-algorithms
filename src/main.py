@@ -1,9 +1,11 @@
+import csv
 import sys
 from puzzle import Puzzle
 
 from uniform_cost import UniformCost
 from greedy_best_first import GreedyBestFirst
 from a_star import AStar
+import json
 
 def load_puzzles(puzzles_file=None):
     """
@@ -37,7 +39,45 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
         print("Error trying to load puzzles from disc")
-        sys.exit()        
+        sys.exit()
+
+    results = {
+      "ucs": {
+        "solution_path_list": [],
+        "search_path_list": [],
+        "no_solution_count": 0,
+        "cost_list": [],
+        "exec_time_list": []
+      },
+      "gbfs_h1": {
+        "solution_path_list": [],
+        "search_path_list": [],
+        "no_solution_count": 0,
+        "cost_list": [],
+        "exec_time_list": []
+      },
+      "gbfs_h2": {
+        "solution_path_list": [],
+        "search_path_list": [],
+        "no_solution_count": 0,
+        "cost_list": [],
+        "exec_time_list": []
+      },
+      "astar_h1": {
+        "solution_path_list": [],
+        "search_path_list": [],
+        "no_solution_count": 0,
+        "cost_list": [],
+        "exec_time_list": []
+      },
+      "astar_h2": {
+        "solution_path_list": [],
+        "search_path_list": [],
+        "no_solution_count": 0,
+        "cost_list": [],
+        "exec_time_list": []
+      }
+    }
 
     # Run each search algorithm on each puzzle
     for puzzle in puzzles:
@@ -45,18 +85,66 @@ if __name__ == "__main__":
 
         ucs = UniformCost(puzzle)
         ucs.search()
+        if ucs.solution_found:
+            results['ucs']['solution_path_list'].append(len(ucs.solution_path))
+            results['ucs']['cost_list'].append(ucs.total_cost)
+            results['ucs']['exec_time_list'].append(ucs.exec_time)
+        else:
+            results['ucs']['no_solution_count'] += 1
+        results['ucs']['search_path_list'].append(len(ucs.search_path))
+
 
         gbfs_h1 = GreedyBestFirst(puzzle, heuristic="h1")
         gbfs_h1.search()
 
+        if gbfs_h1.solution_found:
+            results['gbfs_h1']['solution_path_list'].append(len(gbfs_h1.solution_path))
+            results['gbfs_h1']['cost_list'].append(gbfs_h1.total_cost)
+            results['gbfs_h1']['exec_time_list'].append(gbfs_h1.exec_time)
+        else:
+            results['gbfs_h1']['no_solution_count'] += 1
+        results['gbfs_h1']['search_path_list'].append(len(gbfs_h1.search_path))
+
+
         gbfs_h2 = GreedyBestFirst(puzzle, heuristic="h2")
         gbfs_h2.search()
+
+        if gbfs_h2.solution_found:
+            results['gbfs_h2']['solution_path_list'].append(len(gbfs_h2.solution_path))
+            results['gbfs_h2']['cost_list'].append(gbfs_h2.total_cost)
+            results['gbfs_h2']['exec_time_list'].append(gbfs_h2.exec_time)
+        else:
+            results['gbfs_h2']['no_solution_count'] += 1
+        results['gbfs_h2']['search_path_list'].append(len(gbfs_h2.search_path))
+
 
         astar_h1 = AStar(puzzle, heuristic="h1")
         astar_h1.search()
 
+        if astar_h1.solution_found:
+            results['astar_h1']['solution_path_list'].append(len(astar_h1.solution_path))
+            results['astar_h1']['cost_list'].append(astar_h1.total_cost)
+            results['astar_h1']['exec_time_list'].append(astar_h1.exec_time)
+        else:
+            results['astar_h1']['no_solution_count'] += 1
+        results['astar_h1']['search_path_list'].append(len(astar_h1.search_path))
+
+
         astar_h2 = AStar(puzzle, heuristic="h2")
         astar_h2.search()
 
+        if astar_h2.solution_found:
+            results['astar_h2']['solution_path_list'].append(len(astar_h2.solution_path))
+            results['astar_h2']['cost_list'].append(astar_h2.total_cost)
+            results['astar_h2']['exec_time_list'].append(astar_h2.exec_time)
+        else:
+            results['astar_h2']['no_solution_count'] += 1
+        results['astar_h2']['search_path_list'].append(len(astar_h2.search_path))
 
 
+    # store the results
+    with open('results.csv', 'w') as results_csv:
+        writer = csv.writer(results_csv)
+        for method, method_dict in results.items():
+            for key, value in method_dict.items():
+                writer.writerow([method, key, value])
